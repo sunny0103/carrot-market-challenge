@@ -7,8 +7,7 @@ import { handleForm } from "./actions";
 
 export default function HomeLogIn() {
   const [state, action] = useActionState(handleForm, null);
-  console.log(state);
-  console.log(action);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 gap-10">
       <span className="text-5xl">😺 Welcome 👋</span>
@@ -39,12 +38,17 @@ export default function HomeLogIn() {
           type="password"
           placeholder="Password"
           required
-          errors={[]}
+          errors={state?.errors?.password || []}
           svgPath={SVG_PATHS.PASSWORD}
           svgClassname="size-6 absolute top-4 left-3 text-gray-400"
         />
+        <FormButton text="Log In" />
       </form>
-      <FormButton text="Log In" />
+      {state?.ok ? (
+        <div className="flex rounded-2xl bg-green-500 text-white font-medium h-12  items-center justify-center text-center transition-colors w-md">
+          Success Log In
+        </div>
+      ) : null}
     </div>
   );
 }

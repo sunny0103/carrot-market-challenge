@@ -20,10 +20,11 @@ export default function FormInput({
   svgClassname,
 }: FormInputProps) {
   return (
-    <div className="flex items-center w-full gap-2 relative">
+    <div className="flex flex-col items-center w-full gap-2 relative">
       <input
         name={name}
-        className="bg-transparent w-full border-2 h-13 pl-10 rounded-2xl text-white "
+        className="bg-transparent w-full border-2 h-13 pl-10 rounded-2xl text-white 
+        focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500 transition-colors"
         type={type}
         placeholder={placeholder}
         required={required}
