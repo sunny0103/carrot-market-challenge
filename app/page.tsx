@@ -5,6 +5,7 @@ import Input from "@/components/input";
 import { SVG_PATHS } from "@/components/svg-path";
 import { useActionState } from "react";
 import { login } from "./actions";
+import "@/lib/db";
 
 const initialState = {
   ok: false,
