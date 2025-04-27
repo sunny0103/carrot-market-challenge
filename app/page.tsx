@@ -1,64 +1,37 @@
-"use client";
+import Link from "next/link";
+import Image from "next/image";
 
-import Button from "@/components/button";
-import Input from "@/components/input";
-import { SVG_PATHS } from "@/components/svg-path";
-import { useActionState } from "react";
-import { login } from "./actions";
-import "@/lib/db";
-
-const initialState = {
-  ok: false,
-  fieldErrors: {
-    email: [],
-    username: [],
-    password: [],
-  },
-};
-export default function HomeLogIn() {
-  const [state, dispatch] = useActionState(login, initialState);
-
+export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 gap-10">
-      <span className="text-5xl"> ✨ Welcome ✨</span>
-      <form
-        action={dispatch}
-        className="w-full max-w-md *:font-medium gap-5 flex flex-col"
-      >
-        <Input
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
-          errors={state?.error?.fieldErrors?.email}
-          svgPath={SVG_PATHS.EMAIL}
-          svgClassname="size-6 absolute top-4 left-3 text-gray-400"
-        />
-        <Input
-          name="username"
-          type="text"
-          placeholder="Username"
-          required
-          errors={state?.error?.fieldErrors?.username}
-          svgPath={SVG_PATHS.USER}
-          svgClassname="size-6 absolute top-4 left-3 text-gray-400"
-        />
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
-          errors={state?.error?.fieldErrors?.password}
-          svgPath={SVG_PATHS.PASSWORD}
-          svgClassname="size-6 absolute top-4 left-3 text-gray-400"
-        />
-        <Button text="Log In" />
-      </form>
-      {state.ok ? (
-        <div className="flex rounded-2xl bg-green-500 text-white font-medium h-12  items-center justify-center text-center transition-colors w-md">
-          Success Log In
+    <div className="min-h-screen flex flex-col relative">
+      <div className="flex justify-between items-center gap-10 p-3 mt-5">
+        <span className="border-2 p-3 rounded-full text-xs font-bold italic">
+          MW
+        </span>
+        <h1 className="text-6xl font-extrabold">PROJECT SITE</h1>
+        <div className="flex gap-4 *:font-semibold *:p-3">
+          <div className="bg-transparent border-2 border-transparent hover:border-white hover:rounded-2xl transition-all  ease-in-out">
+            <Link href={"/login"}>Log In</Link>
+          </div>
+          <div className="bg-transparent border-2 border-transparent hover:border-white hover:rounded-2xl transition-all  ease-in-out">
+            <Link href={"/create-account"}>Sign Up</Link>
+          </div>
         </div>
-      ) : null}
+      </div>
+      <div className="w-[90vw] h-[63vh] relative p-4 border-2 rounded-2xl mt-[12vh] ml-[5vw]">
+        <div className="relative w-full h-full">
+          <Image
+            src={"/home_img.jpg"}
+            alt=""
+            fill
+            className="object-cover opacity-75"
+            priority
+          />
+          <span className="absolute bottom-3 right-3 font-semibold italic">
+            Project website using Next JS
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
