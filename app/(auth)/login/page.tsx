@@ -4,8 +4,8 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { SVG_PATHS } from "@/components/svg-path";
 import { useActionState } from "react";
-import "@/lib/db";
 import { login } from "./actions";
+import Link from "next/link";
 
 export default function LogIn() {
   const [state, dispatch] = useActionState(login, null);
@@ -46,6 +46,12 @@ export default function LogIn() {
         />
         <Button text="Log In" />
       </form>
+      <div
+        className="flex flex-col justify-center rounded-2xl bg-green-600 text-white font-medium h-12
+    text-center hover:bg-purple-500 transition-colors w-md"
+      >
+        <Link href={"/create-account"}>Sign Up</Link>
+      </div>
     </div>
   );
 }

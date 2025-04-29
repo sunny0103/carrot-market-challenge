@@ -6,3 +6,5 @@ export const PASSWORD_ERROR_MESSAGE = "Password must contain at least one number
 export const PASSWORD_MIN_LENGTH = 4
 
 export const USERNAME_MIN_LENGTH = 4
+
+export const TWEETLIST_NUMS = 10

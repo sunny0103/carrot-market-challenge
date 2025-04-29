@@ -27,7 +27,7 @@ export default function CreateAccount() {
           errors={state?.fieldErrors.username}
           minLength={3}
           maxLength={10}
-          svgPath={SVG_PATHS.EMAIL}
+          svgPath={SVG_PATHS.USER}
           svgClassname="size-6 absolute top-4 left-3 text-gray-400"
         />
         <Input
@@ -46,7 +46,7 @@ export default function CreateAccount() {
           required
           errors={state?.fieldErrors.password}
           minLength={PASSWORD_MIN_LENGTH}
-          svgPath={SVG_PATHS.EMAIL}
+          svgPath={SVG_PATHS.PASSWORD}
           svgClassname="size-6 absolute top-4 left-3 text-gray-400"
         />
         <Input
@@ -56,7 +56,7 @@ export default function CreateAccount() {
           required
           errors={state?.fieldErrors.confirm_password}
           minLength={PASSWORD_MIN_LENGTH}
-          svgPath={SVG_PATHS.EMAIL}
+          svgPath={SVG_PATHS.PASSWORD}
           svgClassname="size-6 absolute top-4 left-3 text-gray-400"
         />
         <Button text="Create Account" />

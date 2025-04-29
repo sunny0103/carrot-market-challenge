@@ -5,20 +5,23 @@ interface Routes {
     [key:string]:boolean;
 }
 const publicOnlyUrl:Routes ={
-    "/":true,
     "/login":true,
     "/create-account":true
 }
+
 export async function middleware(request:NextRequest) {
     const session = await getSession();
-    const exist = publicOnlyUrl[request.nextUrl.pathname];
+    const isPublicUrl = publicOnlyUrl[request.nextUrl.pathname];
+    
     if(!session.id){
-        if(!exist){
-            return NextResponse.redirect(new URL("/", request.url));
+        if(!isPublicUrl){
+            return NextResponse.redirect(new URL("/login", request.url));
         }
-    }else{
-        if(exist){
-            return NextResponse.redirect(new URL("/product", request.url));
+    } else {
+        // 로그인한 경우
+        // 로그인 페이지나 회원가입 페이지에 접근하려고 하면 홈으로 리다이렉트
+        if(isPublicUrl){
+            return NextResponse.redirect(new URL("/", request.url));
         }
     }
 }
