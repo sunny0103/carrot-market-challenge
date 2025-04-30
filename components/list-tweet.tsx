@@ -30,10 +30,13 @@ export default function ListTweet({
             {formatToTimeAgo(createdAt.toString())}
           </span>
         )}
-        <div className="bg-neutral-500 w-5 h-5 rounded-full" />
       </div>
-      <div className="ml-10 mt-1">
+      <div className="flex gap-3 items-center ml-10">
         <p>{tweet}</p>
+        <div>
+          <span>👍</span>
+          <span>👎</span>
+        </div>
       </div>
     </Link>
   );

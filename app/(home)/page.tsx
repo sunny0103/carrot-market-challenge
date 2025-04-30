@@ -50,12 +50,17 @@ export default async function Home() {
   };
   const initialTweets = await getInitialTweets();
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex justify-between items-center gap-10 p-3">
-        <span className="items-center border-2 px-2 py-8 rounded-full text-xs font-bold italic ml-4">
-          Tweet & Likes
-        </span>
-        <div className="w-[75vw] h-[20vh] relative p-4 border-2 rounded-2xl">
+    <div className="min-h-screen flex flex-col gap-3">
+      <div className="flex justify-between items-center p-3">
+        <div className="flex justify-center text-xl ml-5">
+          <Link
+            href={"/profile"}
+            className="bg-transparent border-2 border-transparent font-semibold hover:border-white hover:rounded-2xl transition-all  ease-in-out p-3"
+          >
+            Profile
+          </Link>
+        </div>
+        <div className="w-[80vw] h-[20vh] relative p-4 border-2 rounded-2xl">
           <div className="relative w-full h-full ">
             <Image
               src={"/home_img.jpg"}
@@ -70,14 +75,6 @@ export default async function Home() {
           </div>
         </div>
         <div className="flex flex-col justify-center gap-4 mr-5">
-          <div className="flex justify-center text-xl">
-            <Link
-              href={"/profile"}
-              className="bg-transparent border-2 border-transparent font-semibold hover:border-white hover:rounded-2xl transition-all  ease-in-out p-3"
-            >
-              Profile
-            </Link>
-          </div>
           <form action={logOut}>
             <button className="text-xl bg-transparent border-2 border-transparent font-semibold  hover:border-white hover:rounded-2xl transition-all  ease-in-out p-3">
               Log out
@@ -85,7 +82,13 @@ export default async function Home() {
           </form>
         </div>
       </div>
-      <div className="flex-1 m-10">
+      <div className="flex-1  m-10">
+        <Link
+          href="/add"
+          className="absolute z-[9999] top-40 right-45 items-center border-2 px-6 py-8 rounded-md text-xl font-bold italic ml-4 bg-neutral-900"
+        >
+          Add Tweet
+        </Link>
         <TweetList initialTweets={initialTweets} />
       </div>
     </div>
