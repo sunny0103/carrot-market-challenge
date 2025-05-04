@@ -27,7 +27,7 @@ async function getInitialTweets() {
       createdAt: true,
       updatedAt: true,
       author: true,
-      Like: true,
+      likes: true,
       id: true,
     },
     take: TWEETLIST_NUMS,

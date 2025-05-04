@@ -1,5 +1,5 @@
 import { PrismaClient } from '../lib/generated/prisma';
-
+import bcrypt from "bcrypt";
 const db = new PrismaClient();
 
 // async function test() {
@@ -28,7 +28,7 @@ const db = new PrismaClient();
 
 
 
-// import bcrypt from "bcrypt";
+
 
 // async function test() {
 //   const password = await bcrypt.hash("1212", 12);
@@ -46,7 +46,7 @@ const db = new PrismaClient();
 //     )
 //   );
 
-  // 2. 트윗 생성 (유저마다 2개씩)
+
 //   const tweets = await Promise.all(
 //     users.flatMap((user) =>
 //       Array.from({ length: 2 }).map((_, i) =>

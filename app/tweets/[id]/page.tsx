@@ -3,6 +3,11 @@ import getSession from "@/lib/session";
 import { formatToTimeAgo } from "@/lib/utils";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { notFound } from "next/navigation";
+import { unstable_cache as nextCache } from "next/cache";
+import LikeButton from "@/components/like-button";
+import { useActionState } from "react";
+import { tweetComment } from "./actions";
+import AddComments from "@/components/add-comments";
 
 async function getIsAuthor(authorId: number) {
   const session = await getSession();
@@ -11,7 +16,8 @@ async function getIsAuthor(authorId: number) {
   }
   return false;
 }
-async function getUser(id: number) {
+
+async function getTweet(id: number) {
   const tweet = await db.tweet.findUnique({
     where: {
       id,
@@ -26,22 +32,76 @@ async function getUser(id: number) {
   });
   return tweet;
 }
+
+const getcachedTweet = nextCache(getTweet, ["tweet-detail"], {
+  tags: ["tweet-detail"],
+});
+
+async function getLikeStatus(tweetId: number, userId: number) {
+  const isliked = await db.like.findUnique({
+    where: {
+      userId_tweetId: {
+        userId,
+        tweetId,
+      },
+    },
+  });
+
+  const likeCount = await db.like.count({
+    where: {
+      tweetId,
+    },
+  });
+
+  return {
+    likeCount,
+    isLiked: Boolean(isliked),
+  };
+}
+
+async function getCachedLikeStatus(tweetId: number) {
+  const session = await getSession();
+  const userId = session.id;
+  const cachedOperation = nextCache(getLikeStatus, ["tweet-like-status"], {
+    tags: [`like-status-${tweetId}`],
+  });
+  if (!userId) return { likeCount: 0, isLiked: false };
+  return cachedOperation(tweetId, userId);
+}
+
 export default async function tweetDetails({
   params,
 }: {
   params: { id: number };
 }) {
-  const id = Number(params.id);
-  if (isNaN(id)) {
+  const { id } = await params;
+  const tweetId = Number(id);
+
+  if (isNaN(tweetId)) {
     return notFound();
   }
 
-  const tweet = await getUser(id);
+  const tweet = await getcachedTweet(tweetId);
   if (!tweet) {
     return notFound();
   }
   const isAuthor = await getIsAuthor(tweet.authorId);
-
+  const { likeCount, isLiked } = await getCachedLikeStatus(tweetId);
+  const comments = await db.comment.findMany({
+    where: {
+      tweetId: tweetId,
+    },
+    include: {
+      author: {
+        select: {
+          username: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
   return (
     <div className="m-10">
       <div className="flex gap-3">
@@ -52,11 +112,19 @@ export default async function tweetDetails({
       <div className="ml-12 flex items-center gap-10">
         <p>{tweet.tweet}</p>
         {isAuthor ? (
-          <button className="border-2 px-4 py-2 rounded-md font-semibold">
+          <button className="border-2 px-4 py-2 rounded-md text-sm font-semibold">
             Delete
           </button>
         ) : null}
       </div>
+      <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={tweetId} />
+      <AddComments
+        tweetId={tweetId}
+        initialComments={comments.map((comment) => ({
+          ...comment,
+          createdAt: comment.createdAt.toISOString(),
+        }))}
+      />
     </div>
   );
 }

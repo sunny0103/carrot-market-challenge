@@ -10,7 +10,7 @@ export async function getMoreLists(page:number) {
           createdAt: true,
           updatedAt: true,
           author: true,
-          Like: true,
+          likes: true,
           id: true,
         },
         take: TWEETLIST_NUMS,

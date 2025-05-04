@@ -33,10 +33,6 @@ export default function ListTweet({
       </div>
       <div className="flex gap-3 items-center ml-10">
         <p>{tweet}</p>
-        <div>
-          <span>👍</span>
-          <span>👎</span>
-        </div>
       </div>
     </Link>
   );
