@@ -32,7 +32,7 @@ export default function TweetList({ initialTweets }: TweetListProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col mb-4">
+      <div className="flex flex-col mb-5">
         {tweets.map((tweet) => (
           <ListTweet key={tweet.id} {...tweet} author={tweet.author.username} />
         ))}

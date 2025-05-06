@@ -17,7 +17,7 @@ export default function ListTweet({
   id,
 }: ListTweetProps) {
   return (
-    <Link href={`/tweets/${id}`}>
+    <Link href={`/tweets/${id}`} className="mb-3">
       <div className="flex gap-3 items-center">
         <div className="bg-neutral-500 w-8 h-8 rounded-full" />
         <span className="mr-3 font-semibold">{author}</span>
