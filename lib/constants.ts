@@ -7,4 +7,4 @@ export const PASSWORD_MIN_LENGTH = 4
 
 export const USERNAME_MIN_LENGTH = 4
 
-export const TWEETLIST_NUMS = 10
+export const TWEETLIST_NUMS = 3

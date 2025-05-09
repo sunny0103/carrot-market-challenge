@@ -7,18 +7,23 @@ import { getMoreLists } from "@/app/(home)/actions";
 
 interface TweetListProps {
   initialTweets: InitialTweets;
+  totalPages: number;
 }
-export default function TweetList({ initialTweets }: TweetListProps) {
+
+export default function TweetList({
+  initialTweets,
+  totalPages,
+}: TweetListProps) {
   const [tweets, setTweets] = useState(initialTweets);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const onLoadPrev = async () => {
     if (page <= 1) return;
     setIsLoading(true);
     const prevLists = await getMoreLists(page - 1);
     setPage((prev) => prev - 1);
-    setTweets((prev) => [...prev, ...prevLists]);
+    setTweets((prev) => [...prevLists]);
     setIsLoading(false);
   };
 
@@ -34,7 +39,13 @@ export default function TweetList({ initialTweets }: TweetListProps) {
     <div className="flex flex-col gap-3">
       <div className="flex flex-col mb-5">
         {tweets.map((tweet) => (
-          <ListTweet key={tweet.id} {...tweet} author={tweet.author.username} />
+          <ListTweet
+            comments={tweet._count.comments}
+            key={tweet.id}
+            {...tweet}
+            likes={tweet._count.likes}
+            author={tweet.author.username}
+          />
         ))}
       </div>
       <div className="flex justify-between mt-4">
@@ -48,8 +59,10 @@ export default function TweetList({ initialTweets }: TweetListProps) {
         >
           {isLoading ? "Loading..." : "← Previous"}
         </button>
-
-        <button onClick={onLoadNext}>
+        <span className="font-medium text-neutral-300">
+          Page {page} of {totalPages}
+        </span>
+        <button onClick={onLoadNext} disabled={page > totalPages || isLoading}>
           {isLoading ? "Loading..." : "Next →"}
         </button>
       </div>

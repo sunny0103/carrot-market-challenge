@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import db from "@/lib/db";
 import TweetList from "@/components/tweet-list";
 import { TWEETLIST_NUMS } from "@/lib/constants";
+import Trends from "@/components/trends";
 
 async function getUser() {
   const session = await getSession();
@@ -27,8 +28,13 @@ async function getInitialTweets() {
       createdAt: true,
       updatedAt: true,
       author: true,
-      likes: true,
       id: true,
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
     },
     take: TWEETLIST_NUMS,
     orderBy: {
@@ -36,6 +42,10 @@ async function getInitialTweets() {
     },
   });
   return tweets;
+}
+
+async function getTotalTweetCount() {
+  return await db.tweet.count();
 }
 
 export type InitialTweets = Awaited<ReturnType<typeof getInitialTweets>>;
@@ -49,18 +59,20 @@ export default async function Home() {
     redirect("/login");
   };
   const initialTweets = await getInitialTweets();
+  const totalTweetCout = await getTotalTweetCount();
+  const totalPages = Math.ceil(totalTweetCout / TWEETLIST_NUMS);
   return (
     <div className="min-h-screen flex">
       {/* left side */}
-      <div className="w-[15vw] mt-10 h-screen border-r border-gray-800 fixed left-0 gap-5">
+      <div className="w-[20vw] mt-10 h-screen fixed left-0 gap-5 border-r-1 border-gray-600">
         <span className="flex justify-center text-5xl mb-5">🐦</span>
         <span className="flex justify-center text-xl font-extrabold mb-5">
           Welcome {user?.username}
         </span>
         <div className="flex *:gap-4 justify-center">
           <Link
-            href={"/profile"}
-            className="flex bg-transparent text-xl border-2 border-transparent font-semibold hover:bg-neutral-700 hover:rounded-2xl transition-colors  ease-in-out p-3"
+            href={`/users/${user?.username}`}
+            className="flex gap-4 text-xl bg-transparent font-semibold  hover:bg-neutral-700 hover:rounded-2xl  transition-colors  ease-in-out p-3"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -122,9 +134,44 @@ export default async function Home() {
             Search
           </Link>
         </div>
+        <div className="flex *:gap-4 justify-center mt-10">
+          <Link
+            href="/add"
+            className="flex px-12 bg-blue-500 text-2xl rounded-2xl font-semibold hover:bg-blue-600 transition-colors  ease-in-out p-3"
+          >
+            Add Tweet
+          </Link>
+        </div>
+      </div>
+      {/* left info page */}
+      <div className="w-[22vw] mt-10 h-screen border-l border-gray-600 fixed right-0 gap-5">
+        <span className="flex justify-center text-2xl font-extrabold">
+          Trends For you
+        </span>
+        <Trends
+          trend_type="# Breaking News"
+          src={"/breaking-news.jpg"}
+          alt="Breaking News"
+          desc="Latest updates on trending topics and news..."
+          trend_info="100,000 people are Tweeting about this "
+        />
+        <Trends
+          trend_type="# Local News"
+          src={"/local_news.jpg"}
+          alt="Local News"
+          desc="Latest updates on trending local news..."
+          trend_info="150,600 people are Tweeting about this "
+        />
+        <Trends
+          trend_type="# Breaking News"
+          src={"/news.jpg"}
+          alt="Breaking News"
+          desc="Latest updates on trending topics and news..."
+          trend_info="103,000 people are Tweeting about this "
+        />
       </div>
       {/* main page */}
-      <div className="flex-1 ml-[15vw] h-screen m-5">
+      <div className="flex-1 ml-[22vw] mr-[24vw] h-screen m-5">
         <div className="relative w-full h-[20vh] border-2 rounded-2xl">
           <Image
             src={"/home_img.jpg"}
@@ -134,17 +181,11 @@ export default async function Home() {
             priority
           />
           <span className="absolute top-3 left-3 font-semibold italic text-5xl">
-            All Tweets
+            Home
           </span>
         </div>
-        <div className="flex-1 m-10">
-          <Link
-            href="/add"
-            className="absolute z-[9999] top-40 right-15 items-center border-2 px-6 py-8 rounded-md text-xl font-bold italic ml-4 bg-neutral-900"
-          >
-            Add Tweet
-          </Link>
-          <TweetList initialTweets={initialTweets} />
+        <div className="mt-10">
+          <TweetList initialTweets={initialTweets} totalPages={totalPages} />
         </div>
       </div>
     </div>
