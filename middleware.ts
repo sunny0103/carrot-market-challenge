@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import getSession from "./lib/session";
 
+
 interface Routes {
     [key:string]:boolean;
 }
@@ -29,3 +30,4 @@ export async function middleware(request:NextRequest) {
 export const config = {
     matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
+
