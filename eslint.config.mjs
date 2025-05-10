@@ -15,13 +15,17 @@ const eslintConfig = [
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     rules: {
       "@typescript-eslint/no-unused-vars": ["warn", {
-        "argsIgnorePattern": "^(_|target|prop)",
-        "varsIgnorePattern": "^_",
-        "ignoreRestSiblings": true,
-        "destructuredArrayIgnorePattern": "^_"
+        "argsIgnorePattern": "^(_|skip|target|prop)$",
+        "varsIgnorePattern": "^(_|skip|target|prop)$",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
       }],
-      "@typescript-eslint/no-require-imports": ["off", {
-        "allow": ["lib/generated/**/*"]
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-expressions": ["error", {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
       }]
     },
     ignores: [
@@ -29,7 +33,9 @@ const eslintConfig = [
       "**/node_modules/**",
       "**/.next/**",
       "**/dist/**",
-      "*.config.*"
+      "*.config.*",
+      "**/*.d.ts",
+      "**/wasm.js"
     ]
   }
 ];
