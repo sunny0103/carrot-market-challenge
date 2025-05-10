@@ -15,20 +15,20 @@ const eslintConfig = [
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     rules: {
       "@typescript-eslint/no-unused-vars": ["warn", {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^(skip|target|prop)$|^_",
+        "argsIgnorePattern": "^(_|target|prop)",
+        "varsIgnorePattern": "^_",
         "ignoreRestSiblings": true,
         "destructuredArrayIgnorePattern": "^_"
       }],
-      "@typescript-eslint/no-require-imports": ["warn", {
-        "allow": ["lib/generated/*"]
+      "@typescript-eslint/no-require-imports": ["off", {
+        "allow": ["lib/generated/**/*"]
       }]
     },
     ignores: [
-      "lib/generated/*",
+      "**/lib/generated/**/*",
       "**/node_modules/**",
-      ".next/**",
-      "dist/**",
+      "**/.next/**",
+      "**/dist/**",
       "*.config.*"
     ]
   }
