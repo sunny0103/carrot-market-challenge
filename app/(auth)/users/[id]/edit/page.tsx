@@ -5,17 +5,21 @@ import { use, useActionState, useEffect, useState } from "react";
 import { editProfile, getUserProfile } from "./actions";
 import { SVG_PATHS } from "@/components/svg-path";
 import Link from "next/link";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 
 interface UserProfile {
   username: string;
   email: string;
   bio?: string;
+  password: string;
 }
 
 export default function Edit({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const [state, dispatch] = useActionState(editProfile, null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [showPassword, setChangePassword] = useState(false);
+
   useEffect(() => {
     const loadProfile = async () => {
       const data = await getUserProfile(resolvedParams.id);
@@ -23,6 +27,7 @@ export default function Edit({ params }: { params: Promise<{ id: string }> }) {
         username: data?.username || "",
         email: data?.email || "",
         bio: data?.bio || "",
+        password: data?.password || "",
       });
     };
     loadProfile();
@@ -66,6 +71,37 @@ export default function Edit({ params }: { params: Promise<{ id: string }> }) {
               svgPath={SVG_PATHS.EMAIL}
               svgClassname="size-6 absolute top-4 left-3 text-gray-400"
             />
+            <button
+              type="button"
+              onClick={() => setChangePassword(!showPassword)}
+              className="w-full bg-blue-800 py-2 rounded-md hover:bg-blue-500 transition-colors ease-in-out"
+            >
+              {showPassword ? "Cancel Password Change" : "Change Password"}
+            </button>
+            {showPassword && (
+              <>
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  required
+                  errors={state?.fieldErrors.password}
+                  minLength={PASSWORD_MIN_LENGTH}
+                  svgPath={SVG_PATHS.PASSWORD}
+                  svgClassname="size-6 absolute top-4 left-3 text-gray-400"
+                />
+                <Input
+                  name="confirm_password"
+                  type="password"
+                  placeholder="Confirm Password"
+                  required
+                  errors={state?.fieldErrors.confirm_password}
+                  minLength={PASSWORD_MIN_LENGTH}
+                  svgPath={SVG_PATHS.PASSWORD}
+                  svgClassname="size-6 absolute top-4 left-3 text-gray-400"
+                />
+              </>
+            )}
           </div>
 
           <div className="flex items-center justify-between gap-4">
