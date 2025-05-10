@@ -23,9 +23,9 @@ export default function AddComments({
 }: AddCommentsProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
-  const [optComments, addComment] = useOptimistic<CommentProps[]>(
+  const [optComments, addComment] = useOptimistic(
     initialComments,
-    (state, newComment: CommentProps) => [newComment, ...state]
+    (state: CommentProps[], newComment: CommentProps) => [newComment, ...state]
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +37,7 @@ export default function AddComments({
 
     const newComment = {
       content: comment,
-      tweetId: tweetId,
+      tweetId,
       createdAt: new Date().toISOString(),
     };
 
@@ -86,9 +86,7 @@ export default function AddComments({
             <p className="text-white">{comment.content}</p>
             {comment.createdAt && (
               <p className="text-xs text-gray-400 mt-1">
-                {formatToTimeAgo(
-                  new Date(comment.createdAt).toLocaleDateString()
-                )}
+                {formatToTimeAgo(comment.createdAt)}
               </p>
             )}
           </div>

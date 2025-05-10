@@ -62,9 +62,13 @@ async function getTweet(id: string) {
   });
   return tweets;
 }
-export default async function Profile({ params }: { params: { id: string } }) {
-  const user = await getUser();
+export default async function Profile({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
+  const user = await getUser();
   const isOwner = await isCurrentUser(id);
   const tweets = await getTweet(id);
   return (

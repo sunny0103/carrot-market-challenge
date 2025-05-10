@@ -5,8 +5,6 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { notFound } from "next/navigation";
 import { unstable_cache as nextCache } from "next/cache";
 import LikeButton from "@/components/like-button";
-import { useActionState } from "react";
-import { tweetComment } from "./actions";
 import AddComments from "@/components/add-comments";
 import NavigationBar from "@/components/navbar";
 import Trends from "@/components/trends";
@@ -75,7 +73,7 @@ async function getCachedLikeStatus(tweetId: number) {
 export default async function tweetDetails({
   params,
 }: {
-  params: { id: number };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const tweetId = Number(id);
