@@ -21,11 +21,11 @@ const eslintConfig = [
         "destructuredArrayIgnorePattern": "^_"
       }],
       "@typescript-eslint/no-require-imports": ["warn", {
-        "allow": ["lib/generated/**/*"]
+        "allow": ["lib/generated/*"]
       }]
     },
     ignores: [
-      "lib/generated/**/*",
+      "lib/generated/*",
       "**/node_modules/**",
       ".next/**",
       "dist/**",
